@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>组织学与胚胎学 - 大题背诵</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--primary:#4A6FA5;
+--primary-light:#6B8FC5;
+--accent:#7C5CFC;
+--accent-light:#9B82FC;
+--bg:#F5F7FA;
+--bg-card:#FFFFFF;
+--bg-sidebar:#1E2A3A;
+--text:#2D3748;
+--text-light:#718096;
+--text-sidebar:#CBD5E0;
+--border:#E2E8F0;
+--success:#48BB78;
+--warning:#ECC94B;
+--danger:#FC8181;
+--shadow:0 2px 8px rgba(0,0,0,0.08);
+--shadow-lg:0 4px 16px rgba(0,0,0,0.12);
+--radius:8px;
+--transition:all 0.3s ease;
+}
+html{scroll-behavior:smooth}
+body{
+font-family:'Noto Sans SC',sans-serif;
+background:var(--bg);
+color:var(--text);
+line-height:1.7;
+min-height:100vh;
+overflow-x:hidden;
+}
+/* Top bar */
+.topbar{
+position:fixed;top:0;left:0;right:0;height:56px;
+background:linear-gradient(135deg,var(--primary),var(--accent));
+color:#fff;display:flex;align-items:center;padding:0 20px;z-index:1000;
+box-shadow:0 2px 12px rgba(74,111,165,0.3);
+}
+.topbar .hamburger{
+display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;margin-right:12px;
+}
+.topbar .title{font-size:18px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .top-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.topbar .top-actions button,.topbar .top-actions label{
+background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);
+color:#fff;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px;
+font-family:inherit;transition:var(--transition);white-space:nowrap;
+}
+.topbar .top-actions button:hover,.topbar .top-actions label:hover{background:rgba(255,255,255,0.35)}
+.topbar .top-actions button.active{background:rgba(255,255,255,0.4);border-color:rgba(255,255,255,0.5)}
+.topbar .top-actions label{display:inline-flex;align-items:center;gap:4px}
+.topbar .top-actions label input{display:none}
+
+/* Search bar */
+.search-wrap{
+position:fixed;top:56px;left:260px;right:0;z-index:999;
+background:#fff;border-bottom:1px solid var(--border);padding:8px 16px;
+display:flex;align-items:center;gap:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+.search-wrap input{
+flex:1;border:1px solid var(--border);border-radius:20px;padding:8px 16px;
+font-size:14px;font-family:inherit;outline:none;transition:var(--transition);
+}
+.search-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(74,111,165,0.15)}
+.search-wrap .search-count{font-size:13px;color:var(--text-light);white-space:nowrap}
+
+/* Sidebar */
+.sidebar{
+position:fixed;top:56px;left:0;bottom:0;width:260px;
+background:var(--bg-sidebar);overflow-y:auto;z-index:998;
+padding:60px 0 20px 0;transition:transform 0.3s ease;
+scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.2) transparent;
+}
+.sidebar::-webkit-scrollbar{width:5px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:3px}
+
+/* Overall progress */
+.overall-progress{
+padding:0 16px 16px 16px;border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.overall-progress .label{display:flex;justify-content:space-between;font-size:13px;color:var(--text-sidebar);margin-bottom:6px}
+.overall-progress .bar{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+.overall-progress .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent-light),var(--success));border-radius:3px;transition:width 0.5s ease}
+
+/* Chapter list */
+.chapter-list{padding:8px 0}
+.chapter-item{border-bottom:1px solid rgba(255,255,255,0.05)}
+.chapter-header{
+display:flex;align-items:center;padding:10px 16px;cursor:pointer;
+color:var(--text-sidebar);transition:var(--transition);gap:8px;
+}
+.chapter-header:hover{background:rgba(255,255,255,0.05)}
+.chapter-header .arrow{
+font-size:10px;transition:transform 0.3s ease;flex-shrink:0;
+}
+.chapter-header.open .arrow{transform:rotate(90deg)}
+.chapter-header .ch-name{flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chapter-header .ch-count{
+font-size:11px;background:rgba(255,255,255,0.15);padding:1px 7px;
+border-radius:10px;flex-shrink:0;
+}
+.chapter-header .ch-check{flex-shrink:0;font-size:16px;display:none}
+.chapter-header .ch-check.show{display:inline}
+.chapter-progress{padding:2px 16px 6px 16px}
+.chapter-progress .bar{height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden}
+.chapter-progress .bar-fill{height:100%;background:var(--success);border-radius:2px;transition:width 0.5s ease}
+.chapter-questions{display:none;padding:0 16px 8px 32px}
+.chapter-questions.show{display:block}
+.chapter-questions a{
+display:block;font-size:13px;color:rgba(203,213,224,0.7);padding:3px 0;
+text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+transition:var(--transition);
+}
+.chapter-questions a:hover{color:#fff}
+.chapter-questions a.mastered{color:var(--success)}
+
+/* Main content */
+.main{
+margin-left:260px;margin-top:104px;padding:24px;max-width:900px;
+transition:margin-left 0.3s ease;
+}
+.main.drill-mode{max-width:700px}
+
+/* Chapter section */
+.chapter-section{margin-bottom:32px}
+.chapter-title{
+font-size:22px;font-weight:700;color:var(--primary);
+margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);
+display:flex;align-items:center;gap:10px;
+}
+.chapter-title .ch-progress{font-size:13px;color:var(--text-light);font-weight:400}
+
+/* Question card */
+.q-card{
+background:var(--bg-card);border-radius:var(--radius);
+box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;
+transition:var(--transition);border:1px solid var(--border);
+}
+.q-card:hover{box-shadow:var(--shadow-lg)}
+.q-card.mastered-card{border-left:4px solid var(--success)}
+.q-card.highlight{background:#FFFDE7}
+
+.q-header{
+display:flex;align-items:flex-start;padding:14px 16px;gap:10px;cursor:pointer;
+}
+.q-header .q-num{
+font-size:13px;font-weight:700;color:var(--accent);
+background:rgba(124,92,252,0.1);padding:2px 8px;border-radius:4px;flex-shrink:0;
+margin-top:2px;
+}
+.q-header .q-text{flex:1;font-size:15px;font-weight:500;line-height:1.6}
+.q-header .q-actions{display:flex;gap:6px;flex-shrink:0;align-items:center;margin-top:2px}
+.q-header .q-actions button{
+background:none;border:none;cursor:pointer;font-size:18px;
+color:var(--text-light);transition:var(--transition);padding:4px;
+}
+.q-header .q-actions button:hover{color:var(--primary)}
+.q-header .q-actions .master-btn{font-size:20px}
+.q-header .q-actions .master-btn.mastered{color:var(--success)}
+
+.q-answer{
+max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s ease;
+}
+.q-answer.show{max-height:2000px;padding:0 16px 16px 16px}
+.q-answer .answer-label{
+font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px;
+text-transform:uppercase;letter-spacing:1px;
+}
+.q-answer .answer-content{
+font-size:14px;color:var(--text);line-height:1.8;
+padding:12px 16px;background:#F8FAFC;border-radius:6px;
+border-left:3px solid var(--primary-light);
+}
+
+/* Drill mode */
+.drill-container{
+display:none;
+}
+.drill-container.show{display:block}
+.drill-header{
+text-align:center;margin-bottom:24px;
+}
+.drill-header h2{font-size:20px;color:var(--primary);margin-bottom:4px}
+.drill-header p{font-size:14px;color:var(--text-light)}
+.drill-card{
+background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow-lg);
+padding:24px;margin-bottom:20px;
+}
+.drill-card .drill-q{font-size:16px;font-weight:500;margin-bottom:16px;line-height:1.7}
+.drill-card .drill-a{
+max-height:0;overflow:hidden;transition:max-height 0.5s ease;
+}
+.drill-card .drill-a.show{max-height:2000px;margin-top:12px}
+.drill-card .drill-a .answer-content{
+font-size:14px;line-height:1.8;padding:16px;background:#F8FAFC;
+border-radius:8px;border-left:3px solid var(--primary-light);
+}
+.drill-nav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.drill-nav button{
+padding:10px 24px;border-radius:20px;border:none;cursor:pointer;
+font-family:inherit;font-size:14px;font-weight:500;transition:var(--transition);
+}
+.drill-nav .btn-show{
+background:var(--primary);color:#fff;
+}
+.drill-nav .btn-show:hover{background:var(--primary-light)}
+.drill-nav .btn-master{
+background:var(--success);color:#fff;
+}
+.drill-nav .btn-master:hover{background:#38A169}
+.drill-nav .btn-next{
+background:var(--accent);color:#fff;
+}
+.drill-nav .btn-next:hover{background:var(--accent-light)}
+.drill-nav .btn-prev{
+background:var(--bg);color:var(--text);border:1px solid var(--border);
+}
+.drill-nav .btn-prev:hover{background:var(--border)}
+.drill-nav .btn-exit{
+background:none;color:var(--danger);border:1px solid var(--danger);
+}
+.drill-nav .btn-exit:hover{background:rgba(252,129,129,0.1)}
+.drill-info{text-align:center;font-size:13px;color:var(--text-light);margin-bottom:16px}
+
+/* Empty state */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:15px}
+
+/* Overlay */
+.sidebar-overlay{
+display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:997;
+}
+.sidebar-overlay.show{display:block}
+
+/* Toast */
+.toast{
+position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+background:#333;color:#fff;padding:10px 24px;border-radius:20px;font-size:14px;
+opacity:0;transition:var(--transition);z-index:2000;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Responsive */
+@media(max-width:768px){
+.topbar .hamburger{display:block}
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.sidebar-overlay.show{display:block}
+.search-wrap{left:0}
+.main{margin-left:0;margin-top:104px;padding:16px}
+.topbar .top-actions .btn-text{display:none}
+.topbar .top-actions button,.topbar .top-actions label{padding:6px 10px;font-size:12px}
+.chapter-title{font-size:18px}
+}
+
+/* Scrollbar for main */
+.main::-webkit-scrollbar{width:6px}
+.main::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Animation for cards */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.q-card{animation:fadeInUp 0.3s ease forwards}
+.q-card:nth-child(2){animation-delay:0.05s}
+.q-card:nth-child(3){animation-delay:0.1s}
+.q-card:nth-child(4){animation-delay:0.15s}
+.q-card:nth-child(5){animation-delay:0.2s}
+.q-card:nth-child(6){animation-delay:0.25s}
+
+/* Study mode indicator */
+.study-badge{
+display:none;font-size:11px;background:var(--warning);color:#333;
+padding:2px 8px;border-radius:10px;font-weight:500;
+}
+.study-badge.show{display:inline-block}
+
+.hidden-by-search{display:none!important}
+
+/* Chapter section hidden when searching */
+.chapter-section.hidden-by-search{display:none!important}
+
+.no-results{display:none;text-align:center;padding:40px;color:var(--text-light)}
+.no-results.show{display:block}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+<div class="title">组织学与胚胎学 - 大题背诵</div>
+<div class="top-actions">
+<label id="studyToggle" title="学习模式：默认隐藏答案">
+<input type="checkbox" onchange="toggleStudyMode(this.checked)">
+<span>学习模式</span>
+<span class="study-badge" id="studyBadge">ON</span>
+</label>
+<button id="drillBtn" onclick="startDrill()" title="随机抽查未掌握题目">随机抽查</button>
+<button onclick="resetProgress()" title="重置所有进度">重置</button>
+</div>
+</div>
+
+<!-- Search -->
+<div class="search-wrap">
+<input type="text" id="searchInput" placeholder="搜索题目关键词..." oninput="handleSearch(this.value)">
+<span class="search-count" id="searchCount"></span>
+</div>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+<div class="overall-progress">
+<div class="label"><span>总体进度</span><span id="overallPercent">0%</span></div>
+<div class="bar"><div class="bar-fill" id="overallBar" style="width:0%"></div></div>
+</div>
+<div class="chapter-list" id="chapterList"></div>
+</nav>
+
+<!-- Main Content -->
+<main class="main" id="mainContent">
+<div id="normalView"></div>
+<div class="drill-container" id="drillView">
+<div class="drill-header">
+<h2>随机抽查模式</h2>
+<p>系统会随机展示未掌握的题目，帮助你检验学习成果</p>
+</div>
+<div class="drill-info" id="drillInfo"></div>
+<div class="drill-card" id="drillCard"></div>
+<div class="drill-nav" id="drillNav"></div>
+</div>
+<div class="no-results" id="noResults">
+<div class="icon">&#128269;</div>
+<p>没有找到匹配的题目</p>
+</div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== DATA =====================
+const chapters = [
+{
+id:1, title:"绪论",
+questions:[
+{q:"试述HE染色的原理和意义", a:"HE染色是最常用的组织切片染色方法，是用苏木精（hematoxylin）和伊红(eosin)染料进行染色，简称HE染色。苏木精是碱性染料，能将细胞核染成紫蓝色，对碱性染料亲合力强者，称嗜碱性；伊红是酸性染料，能将细胞质染成红色，对酸性染料亲合力强者，称嗜酸性。"},
+{q:"简述PAS反应", a:"又称过碘酸-Schiff反应（periodic acid Schiff reaction），简称PAS反应，是组织化学方法中的一种，用于显示聚糖和糖蛋白的糖链。糖被强氧化剂过碘酸氧化后，形成多醛；后者再与无色的品红硫酸复合物（Schiff试剂）结合，形成紫红色反应产物，即PAS反应阳性。"}
+]
+},
+{
+id:2, title:"上皮组织",
+questions:[
+{q:"试述上皮组织的一般特征、分布、分类与功能", a:"（1）一般特征：①是由大量紧密而规则排列的细胞和少量的细胞间质所组成；②细胞具有极性，分为游离面、基底面；③一般无血管分布；④有丰富的神经末梢分布，故感觉灵敏。（2）分布：被覆上皮主要覆盖于身体表面及衬贴于体腔和有腔器官的内表面。（3）分类：根据功能和分布分为被覆上皮、腺上皮和感觉上皮。（4）功能：具有保护、吸收、分泌、排泄等功能。"},
+{q:"试比较微绒毛与纤毛的形态结构与功能", a:"（1）微绒毛：是由上皮细胞游离面的胞质和胞膜共同向外伸出的细小指状突起，其内含有许多纵行微丝。光镜下为所见的纹状缘或刷状缘。功能是扩大细胞表面积，有利于细胞的吸收。（2）纤毛：是上皮细胞游离面的胞质和胞膜共同向外伸出且能摆动的细长突起，其内含有纵行排列的微管。纤毛比微绒毛粗而长，光镜下可见。功能是能快速、定向和有节律地摆动，把粘附在上皮表面的分泌物和颗粒物等排出体外。"},
+{q:"名词解释：杯状细胞", a:"是一种腺细胞，形似高脚酒杯，胞质顶部充满黏液性分泌颗粒，胞核呈三角形或扁平形，位于基底部或一侧，分泌黏液润滑上皮表面及保护上皮。"},
+{q:"名词解释：缝隙连接", a:"又称通讯连接，是一种广泛存在于各种组织的细胞连接形式，电镜下连接处相邻细胞膜高度平行，细胞间隙仅约3nm，胞膜中有许多规律分布的柱状颗粒，称连接小体，它们聚集为大小不等的斑状，每个连接小体由6个杆状的连接蛋白分子围成，中央有管腔，相连细胞膜中的连接小体对接，管腔也通连，成为细胞间直接交通的管道。在钙离子和其它因素作用下，管道可开放或闭合，有利于物质运输和营养代谢。"},
+{q:"名词解释：连接复合体", a:"两种或两种以上的特化的细胞连接（紧密连接、中间连接、桥粒和缝隙连接）同时存在，不仅见于上皮组织，也见于肌组织，神经组织等。"}
+]
+},
+{
+id:3, title:"结缔组织",
+questions:[
+{q:"名词解释：分子筛", a:"在疏松结缔组织中，由长链曲折盘绕的透明质酸作为蛋白聚糖的主干，其他小分子氨基聚糖如试管刷上的鬃毛，与核心蛋白借共价键结合，形成蛋白聚糖亚单位，再通过结合蛋白结合于透明质酸主干，形成蛋白聚糖聚合体，构成许多有微孔的网状结构。小于孔隙的水、营养物、代谢产物、激素、气体分子等可通过，有利于物质交换；大于孔隙的大分子物质、细菌等则不能通过，构成局部可限制性扩散的防御屏障。溶血性链球菌和癌细胞等因能产生透明质酸酶，破坏分子筛结构，故扩散或转移。"},
+{q:"名词解释：肥大细胞", a:"是结缔组织细胞的一种，常沿小血管和淋巴管分布，细胞体积较大，呈圆形或卵圆形，核小而圆，胞质中含异染性颗粒，内含组胺、肝素、白三烯和嗜酸性粒细胞趋化因子等，当受到刺激时，颗粒内物质释放，导致过敏反应。"},
+{q:"试述成纤维细胞和浆细胞结构与功能的异同", a:"同：两者均合成蛋白质。异：成纤维细胞细胞较大，扁平或不规则形，多突起；核较大，卵圆形，着色浅，核仁明显；合成基质和纤维，参与创伤修复。浆细胞细胞圆形或卵圆形，核圆或卵圆形，常偏位，异染色质粗大在核膜下呈车轮状排列；EM胞质内含丰富粗面内质网和游离核糖体，发达的高尔基复合体；合成免疫球蛋白。"}
+]
+},
+{
+id:4, title:"软骨和骨",
+questions:[
+{q:"名词解释：同源细胞群", a:"在软骨组织的中部，由一个幼稚的软骨细胞分裂增殖所形成的软骨细胞群，每群含有2～8个软骨细胞聚集在一起，位于软骨囊内。"},
+{q:"名词解释：类骨质", a:"在骨组织形成的过程中，由成骨细胞所产生的细胞外基质，即骨组织的有机成分，包括胶原纤维和基质（蛋白多糖），尚无骨盐沉积。类骨质经钙化后即形成骨质。"},
+{q:"名词解释：骨单位", a:"又称哈弗斯系统，主要分布于长骨的骨密质中，位于内、外环骨板之间，是骨密质的主要支持性结构单位。是由中央管和数十层骨单位骨板所构成的圆筒状结构。中轴为中央管，内含穿行的血管、神经等，其周围有4～20层不等的呈同心圆环绕排列的骨单位骨板。"},
+{q:"试述长骨骨干密质骨的结构特点", a:"长骨密质骨由环骨板、骨单位和间骨板3个部分构成；（1）环骨板位于长骨骨干内、外表层，分别称为内环骨板和外环骨板。外环骨板厚，由数层或数十层骨板构成，较规则地环绕于骨干的外周；内环骨板薄，仅由数层骨板构成，不如外环骨板规则；（2）骨单位又称哈弗斯系统，由中央管和数十层骨单位骨板构成的圆筒状结构；（3）间骨板位于骨单位之间或骨单位与内外环骨板之间，形状不规则，由数层平行的骨板构成，是骨生长和改建过程中未被吸收的残留部分；（4）骨密质中还有横向穿行的穿通管，内含血管和结缔组织，联通相邻骨单位的中央管。"}
+]
+},
+{
+id:5, title:"血液",
+questions:[
+{q:"试述红细胞的形态结构及其功能", a:"红细胞呈双凹圆盘状，直径约为7.5um，中央较薄，周边厚；成熟红细胞无核，也无细胞器，胞质内充满血红蛋白；能与O2和CO2结合，携运气体，供给全身组织和细胞所需的O2，带走所产生的CO2。"},
+{q:"试述三种粒细胞的光镜结构和功能", a:"中性粒细胞：是数量最多的白细胞，球形，直径10～12um，核深染，杆状或分叶状，一般为2～5叶，胞质中含细、淡红色颗粒。有活跃的变形运动和吞噬功能，当细菌入侵，中性粒细胞有趋化性，聚集于细菌入侵处，吞噬和释放各种酶以杀灭细菌起防御作用；同时它自身也常死亡，成为脓细胞。\n嗜酸性粒细胞：球形直径10～15um，核深染，多为2叶，胞质中含粗大的鲜红色嗜酸性颗粒。能吞噬抗原抗体复合物，杀灭寄生虫；释放组胺酶灭活组胺，从而抑制过敏反应。\n嗜碱性粒细胞：球形，直径10～12um，核呈S形或不规则，染色淡，胞质中含大小不等、分布不均匀的嗜碱性颗粒，是数量最少的白细胞。具有抗凝血功能，也参与过敏反应。"},
+{q:"名词解释：网织红细胞", a:"从骨髓进入血液的未完全成熟的红细胞内尚残留部分核糖体，用煌焦油蓝染色呈细网状，故称为网织红细胞。在血液中大约1天后完全成熟，核糖体消失。在成人网织红细胞占红细胞总数的0.5%～1.5%，该数值的变化可作为衡量骨髓造血功能的一项指标。"},
+{q:"名词解释：单核细胞", a:"是体积最大的白细胞，直径14～20um，核呈肾形、马蹄形或不规则形，染色质细而松散，着色较浅。胞质丰富，弱嗜碱性，内含嗜天青颗粒。单核细胞在血液中停留12-48小时，然后进入结缔组织或其他组织，分化为巨噬细胞等具有吞噬功能的细胞。"}
+]
+},
+{
+id:6, title:"肌组织",
+questions:[
+{q:"比较骨骼肌纤维和心肌纤维光、电镜结构", a:"光镜下：骨骼肌纤维呈长圆柱形，核多，扁椭圆形，位于肌膜下方；肌浆内有许多与肌纤维长轴平行的肌原纤维，有明显的横纹。心肌纤维呈短柱状，有分支相互连成网，核多为一个，卵圆形，位于细胞中央；肌浆丰富，横纹不明显；相邻细胞连接处可见闰盘。\n电镜下：骨骼肌纤维内肌原纤维由大量粗肌丝和细肌丝排列而成；横小管位于A带与I带交界处；肌浆网发达，横小管和两侧的终池构成三联体。心肌纤维肌原纤维少，粗细不等；横小管位于Z线水平；肌浆网稀疏不发达，终池少，多见二联体；闰盘横位部分位于Z线水平，有中间连接和桥粒，纵位部分有缝隙连接；部分心房肌纤维肌浆内有分泌颗粒。"},
+{q:"试述横小管和肌质网的结构特点及与三联体的关系", a:"横小管是肌膜向肌质内凹陷而成的小管，其走行方向与肌原纤维的长轴垂直。人与哺乳动物骨骼肌的横小管位于A带与I带交界处，而心肌的横小管位于Z线处。肌质网是肌纤维内特化的滑面内质网，在相邻横小管之间呈纵向排列，包绕每一条肌原纤维，又称纵小管。位于横小管两侧的肌质网膨大，呈扁囊状，称终池。每条横小管与其两侧的终池共同构成三联体。肌质网膜上有丰富的钙泵，能将肌质中的Ca²⁺泵入肌质网中，起储存及调节肌质中Ca²⁺浓度的作用。"},
+{q:"名词解释：肌节", a:"肌节是相邻两条Z线之间的一段肌原纤维，是肌原纤维的结构和功能单位，是肌纤维收缩和舒张的结构基础。每个肌节由1/2 I带＋A带＋1/2 I带组成。"},
+{q:"名词解释：闰盘", a:"是心肌细胞的连接结构。横位部分位于Z线水平，有中间连接和桥粒，使心肌纤维间连接牢固；纵位部分有缝隙连接，能传导电信号，保证心肌纤维收缩、舒张同步。"}
+]
+},
+{
+id:7, title:"神经组织",
+questions:[
+{q:"试述神经元胞体的结构和功能", a:"神经原胞体的细胞膜上有膜蛋白，可以是离子通道，也可以是受体，具有接受刺激、产生和传导冲动的功能。细胞核大而圆，位于胞体中央，着色浅，核仁大而明显。细胞质除含有一般的细胞器外，还可见嗜碱性的颗粒状或斑块状结构，称尼氏体（Nissl体），电镜下为发达的平行排列的粗面内质网和游离核糖体，主要功能是合成更新细胞器所需的结构蛋白、神经递质、神经分泌物和酶等。胞质中还含有神经原纤维，由微管和神经丝聚集而成，构成神经元的骨架，并参与神经元内的物质运输。"},
+{q:"试述化学性突触的结构和功能", a:"突触是神经元与神经元之间或神经元与效应细胞之间传递信息的连接结构。根据媒介的性质可分为化学突触和电突触两类。电突触即缝隙连接，化学突触以神经递质为传递信息的媒介。光镜下，突触的结构不清晰，银染时可见扣结。电镜下，化学突触分三部分：（1）突触前成分：包括突触前膜、以及胞质内的线粒体、突触小泡、滑面内质网、神经丝和微管等；（2）突触后成分：包括突触后膜，膜表面有离子通道或特异性受体、以及胞质内的少量线粒体等；（3）突触间隙。"},
+{q:"试比较有髓神经纤维和无髓神经纤维的结构和功能", a:"有髓神经纤维和无髓神经纤维都是由神经胶质细胞包裹神经元的轴突形成的长条状结构，都能传递神经冲动。周围神经系统的有髓神经纤维由轴突和神经膜细胞构成，轴突在中央，神经膜细胞呈卷桶状包在轴突的外面，形成髓鞘和神经膜，髓鞘呈分节状包绕轴突，分节的狭窄处称神经纤维节，神经冲动在神经纤维节间呈跳跃式传导，传导速度快且精确。无髓神经纤维的轴突外无髓鞘，一个神经膜细胞可包裹许多条轴突，故神经冲动的传导速度慢且不精确。"},
+{q:"名词解释：尼氏体", a:"光镜下呈强嗜碱性颗粒状或斑块状的结构，电镜下由发达的粗面内质网和游离核糖体构成。具有活跃的合成蛋白质的功能。神经元受损时减少或消失；功能恢复时重新出现或增加。因此，是判断神经元功能的标志之一。"},
+{q:"名词解释：突触", a:"是指神经元与神经元之间，或神经元与非神经元（效应细胞）之间传递信息的部位。突触分化学突触和电突触两类，前者以化学物质（神经递质）作为媒介传递信息，电镜下由突触前成分、突触间隙和突触后成分构成。电突触的本质是缝隙连接。"},
+{q:"名词解释：郎飞结", a:"位于有髓神经纤维上，髓鞘呈节段包绕轴突，其间断部轴膜裸露，此狭窄之处为郎飞结，此处可发生膜电位变化，有髓神经纤维的传导就是从一个郎飞结跳到下一个郎飞结。"}
+]
+},
+{
+id:8, title:"循环系统",
+questions:[
+{q:"以中动脉为例说明动脉管壁的一般结构，并联系功能比较大动脉、中动脉和小动脉在结构上的主要不同点", a:"中动脉管壁分为内膜、中膜和外膜三层。内膜层又分为内皮、内皮下层、内弹性膜三层。中膜较厚，主要由10～40层环形排列的平滑肌纤维组成，故称肌性动脉，对机体内各器官的血流量分配起调节作用。外膜由较疏松的结缔组织构成。\n大动脉、中动脉和小动脉在结构上的主要差别在中膜层。大动脉中膜主要为弹性膜，又称弹性动脉，使心脏间断性射血变为连续不断的血流。中动脉中膜主要由平滑肌纤维组成，称肌性动脉。小动脉中膜层也主要由平滑肌组成，其平滑肌层由9层渐减至3层，小动脉和微动脉的舒缩，能调节局部组织的血流量，影响外周血流的阻力。"},
+{q:"毛细血管的一般结构由哪几层？电镜下可分为哪三种类型？它们的主要结构特征是什么？", a:"毛细血管一般结构由内皮、基膜以及紧贴管壁的周细胞及少量结缔组织组成。电镜下可分三类：\n连续毛细血管：内皮细胞完整，胞质中有许多质膜小泡；细胞连接处有紧密连接；基膜完整。\n有孔毛细血管：内皮细胞有许多贯穿胞质的内皮窗孔，小孔上可有很薄的隔膜封闭；细胞之间亦有紧密连接；基膜完整。\n血窦：内皮细胞有孔，孔上无隔膜；细胞之间有较大的间隙；基膜完整或不完整，甚至缺如。"},
+{q:"名词解释：血窦", a:"主要分布在肝、脾、骨髓和某些内分泌腺的一种毛细血管。结构特点：内皮细胞有孔，孔上无隔膜；细胞之间有较大的间隙；基膜完整或不完整，甚至缺如。血窦为通透性最大的一种毛细血管。"},
+{q:"名词解释：蒲肯野纤维", a:"又称束细胞，组成房室束及其分支，广泛分布于心内膜下层。细胞较心肌纤维短而粗，有1～2个细胞核，胞质中有丰富的线粒体和糖原，肌原纤维较少，细胞间有较发达的闰盘。蒲肯野纤维与普通的心肌纤维相连续，将冲动传至心室各部分。"}
+]
+},
+{
+id:9, title:"免疫系统",
+questions:[
+{q:"试述单核吞噬细胞系统的来源、组成及功能", a:"指体内具有强吞噬能力的细胞系，该系细胞均起源于血液的单核细胞，进入不同的组织和器官具有不同的名称。组成：血液中的单核细胞、结缔组织中的巨噬细胞、肝脏内的库普弗细胞、肺内的尘细胞、神经组织中的小胶质细胞、骨组织中的破骨细胞、皮肤中的郎格汉斯细胞等。功能：清除异物、处理抗原和参与免疫反应。"},
+{q:"试述淋巴结皮质的结构与功能特点", a:"淋巴结皮质位于被膜下方，由浅层皮质、副皮质区和皮质淋巴窦组成。（1）浅层皮质含淋巴小结，主要由B淋巴细胞组成，为淋巴结发生体液免疫的部位。（2）副皮质区位于淋巴结的皮质深层，主要含T淋巴细胞，是淋巴结发生细胞免疫的部位，为胸腺依赖区。（3）皮质淋巴窦位于被膜、小梁和淋巴小结之间，窦内附有许多巨噬细胞，有利于巨噬细胞行使清除与吞噬功能。"},
+{q:"试述脾脏白髓的结构与功能特点", a:"白髓由脾小结和动脉周围淋巴鞘组成。（1）脾小结即淋巴小结，主要由大量B细胞构成；初级淋巴小结经抗原刺激后形成生发中心。（2）动脉周围淋巴鞘是围绕在中央动脉周围的厚层弥散淋巴组织，由大量T细胞和少量巨噬细胞构成，相当于淋巴结中的副皮质区，故也是胸腺依赖区，但无毛细血管后微静脉。"},
+{q:"名词解释：胸腺小体", a:"散在分布于胸腺髓质内，是髓质的特征性结构。大小不等，由胸腺上皮细胞呈同心圆包绕排列而成，周围的上皮细胞较幼稚，中央的上皮细胞已经成熟并角化，呈均质状的强嗜酸性。人类胸腺小体能刺激胸腺树突状细胞的成熟，后者能够诱导胸腺内调节性T细胞的增殖和分化。"},
+{q:"名词解释：血-胸腺屏障", a:"由连续毛细血管内皮及内皮细胞之间的紧密连接、内皮周围连续的基膜、含有巨噬细胞的血管周隙、胸腺上皮细胞的基膜和连续的胸腺上皮细胞突起构成。血液内一般抗原物质和某些药物不易透过此屏障，维持胸腺内环境的稳定，保证T细胞的正常发育。"},
+{q:"名词解释：淋巴细胞再循环", a:"外周淋巴器官及淋巴组织内的淋巴细胞经淋巴管进入血流而到达全身，同时又可经毛细血管后微静脉由血流返回淋巴器官或淋巴组织，使淋巴细胞在全身淋巴器官和淋巴组织之间迁移。沟通了信息，使全身免疫系统成为功能整体；增加了淋巴细胞接触抗原活化的机会。"}
+]
+},
+{
+id:10, title:"皮肤",
+questions:[
+{q:"名词解释：表皮", a:"位于皮肤浅层，由角化的复层扁平上皮构成。构成表皮的细胞按形态和功能分为角质形成细胞和非角质形成细胞两类。角质形成细胞是表皮的主要细胞成分，能合成角蛋白。厚表皮从基底面到游离面分为基底层、棘层、颗粒层、透明层和角质层。非角质形成细胞包括黑素细胞、朗格汉斯细胞和梅克尔细胞三种。"}
+]
+},
+{
+id:11, title:"眼",
+questions:[
+]
+},
+{
+id:12, title:"内分泌系统",
+questions:[
+{q:"试述肾上腺皮质的结构特点和功能", a:"皮质由外向内分为球状带、束状带和网状带，这三个带的内分泌细胞均属于分泌类固醇激素的细胞，胞质内富含滑面内质网、管状嵴线粒体和脂滴。球状带细胞分泌盐皮质激素，调节水、盐代谢；束状带细胞分泌糖皮质激素，有调节糖异生、抗炎及抑制免疫反应的作用；网状带细胞主要分泌雄激素。"},
+{q:"腺垂体远侧部嗜酸性细胞和嗜碱性细胞各分泌哪些激素？", a:"嗜酸性细胞包括生长激素细胞和催乳激素细胞，分别分泌生长激素和催乳激素。嗜碱性细胞分为促肾上腺皮质激素细胞、促甲状腺激素细胞和促性腺激素细胞，前两者分泌促肾上腺皮质激素和促甲状腺激素；后者分泌卵泡刺激素和黄体生成素。"},
+{q:"试述神经垂体神经部的结构特点及功能", a:"神经垂体由神经胶质细胞（垂体细胞）和无髓神经纤维组成。神经纤维的轴突来自于下丘脑视上核和室旁核的神经内分泌细胞，这些细胞能分泌催产素和血管加压素（抗利尿激素），胞体合成的激素沿轴突运输，在释放前可于轴突沿途和末端聚集，在HE切片上形成大小不等、均质状的嗜酸性团块，称为赫林体。"},
+{q:"名词解释：嗜铬细胞", a:"肾上腺髓质细胞用含铬盐的固定液固定时，胞质内可见被铬盐染成黄褐素的嗜铬颗粒，故称为嗜铬细胞。具有分泌含氮类激素细胞的结构特点，富含粗面内质网、高尔基复合体和膜被颗粒。能分泌肾上腺素和去甲肾上腺素。"},
+{q:"名词解释：赫林体", a:"下丘脑神经核团具有分泌激素的功能，其激素沿神经纤维向神经垂体运送，在轴突沿途和终末，这些激素颗粒聚集成团，使轴突呈串珠状膨大，在HE切片上被染成大小不一、均质的嗜酸性团块，称为赫林体，其中含有的激素为催产素和血管加压素。"},
+{q:"名词解释：垂体门脉系统", a:"腺垂体的血液供应主要来自垂体上动脉，在漏斗部分支形成第一级毛细血管网，然后汇合成垂体门微静脉，由结节部入远侧部，在此分支形成第二级毛细血管网。下丘脑分泌的释放激素和释放抑制激素通过该结构运送到腺垂体远侧部，调节相应细胞的分泌功能。"},
+{q:"比较分泌含氮类激素细胞和分泌类固醇类激素细胞的特点", a:"含氮激素分泌细胞：胞质内含有丰富的粗面内质网、发达的高尔基复合体、游离核糖体和膜包被的分泌颗粒等。\n类固醇激素分泌细胞：胞质内含有丰富的滑面内质网，线粒体较多其嵴多呈管状；含较多脂滴为激素合成的原料。仅包括肾上腺皮质和性腺的内分泌细胞。"}
+]
+},
+{
+id:13, title:"消化管",
+questions:[
+{q:"小肠黏膜与吸收有关的结构有哪些？", a:"1. 小肠表面形成的皱襞、绒毛和微绒毛有利于扩大吸收的表面积；2. 柱状细胞膜上有分解营养物质的酶和物质吸收的受体；3. 绒毛内有中央乳糜管，该管壁通透性较大，可运送上皮吸收的脂肪物质；4. 结缔组织中有丰富的有孔毛细血管，有利于上皮细胞吸收的氨基酸和葡萄糖进入血液；5. 绒毛内也有散在的平滑肌纤维，其收缩可使绒毛缩短，有助于物质的吸收。"},
+{q:"胃底腺的细胞结构和功能", a:"壁细胞：LM胞体大，呈圆形或三角形，核圆形位中央，胞质嗜酸性。EM游离面胞膜向胞质内凹陷成分支小管（分泌小管），小管腔面有微绒毛，周围有微管泡系统和大量线粒体。功能：分泌盐酸和内因子。\n主细胞：LM呈柱状，核圆形位基部，胞质顶部含酶原颗粒，基部嗜碱性。EM顶部含酶原颗粒，有发达Gc，基部有丰富RER。功能：分泌胃蛋白酶原。\n颈黏液细胞：分布于胃底腺顶部，主要分泌可溶性酸性黏液。\n干细胞：位于腺体顶部，具有活跃的增殖能力。\n内分泌细胞：分泌多种胃肠道激素。"},
+{q:"比较食管、胃体、小肠和结肠黏膜的结构", a:"（1）四者黏膜从内向外都分为上皮、固有层和黏膜肌层。（2）食管的上皮为未角化的复层扁平上皮，黏膜下层可见食管腺及导管。（3）胃体的上皮为单层柱状上皮，主要由表面黏液细胞组成，固有层含胃底腺，由主细胞、壁细胞、颈黏液细胞、内分泌细胞和未分化细胞组成。（4）小肠上皮由吸收细胞、杯状细胞组成，有绒毛和中央乳糜管；含小肠腺，还有潘氏细胞、内分泌细胞和未分化细胞。（5）结肠黏膜无绒毛，杯状细胞增多，肠腺稠密而长，无潘氏细胞。"},
+{q:"气管管壁的结构及各级支气管树的结构变化规律", a:"气管壁由内向外依次分为黏膜、黏膜下层和外膜三层。黏膜上皮为假复层纤毛柱状上皮；黏膜下层含混合腺；外膜由16～20个"C"形透明软骨环和结缔组织构成。\n变化规律：（1）黏膜上皮由假复层纤毛柱状上皮逐渐转变为单层柱状上皮。（2）杯状细胞、腺体和软骨片逐渐减少直至消失。（3）平滑肌从散在分布到成束，最终形成平滑肌环。（4）管壁变薄结构越来越简单，三层分解不明显。"},
+{q:"名词解释：中央乳糜管", a:"在小肠绒毛中轴内有1-2条纵行毛细淋巴管，管腔较大，内皮细胞间隙宽，无基膜，管壁通透性较大，可运送上皮吸收的脂肪物质。"},
+{q:"名词解释：帕内特细胞", a:"为小肠腺细胞中的一种，主要位于肠腺的底部，以回肠为多，为锥体形细胞，核卵圆位于基部，顶部胞质内富含嗜酸性颗粒，内含溶菌酶和防御素，有杀菌作用。"}
+]
+},
+{
+id:14, title:"消化腺",
+questions:[
+{q:"试述肝细胞的形态结构和功能", a:"LM：胞体大，多边形，核大而圆，居中，核膜清晰，核仁明显；胞质嗜酸性。EM：有大量线粒体能提供能量、粗面内质网、滑面内质网、高尔基体、溶酶体、微体。功能：①分泌胆汁参与脂类消化；②合成多种蛋白质；③参与糖、脂类、激素等物质代谢；④参与物质的生物转化及有害物质、药物的解毒；⑤造血（胎儿期）。"},
+{q:"试述肝血窦的结构与功能", a:"血窦位于肝板与肝板之间，形态不规则的腔隙。血窦壁由一层内皮细胞围成，内皮细胞有许多窗孔，孔上无膜隔，内皮外无基膜，通透性较大，有利于肝细胞和血液之间进行物质交换。腔内有肝巨噬细胞等，具有活跃的吞噬、吞饮能力。"},
+{q:"试述肝细胞的各种细胞器与肝脏功能的关系", a:"粗面内质网和游离核糖体：合成多种血浆蛋白；滑面内质网：脂类代谢、胆红素转化、合成胆汁、糖原合成和分解、毒物降解、类固醇激素灭活；高尔基复合体：胆汁合成、蛋白质加工和贮存；线粒体：为肝细胞的功能活动提供能量；溶酶体：消化吞饮的物质和退化的细胞器，参与胆红素代谢；微体：含过氧化氢酶，消除过氧化氢毒性。"},
+{q:"试述胰腺外分泌部腺泡的组织结构特点及功能", a:"胰腺外分泌部腺泡为纯浆液性腺泡组成。腺细胞呈锥体形，核圆形位于基底部。顶部胞质内含有许多嗜酸性的酶原颗粒。基部胞质呈嗜碱性。腺泡腔还可见着色浅的泡心细胞。分泌胰液，含多种消化酶如胰蛋白酶、胰淀粉酶、胰脂酶等。"},
+{q:"名词解释：肝小叶", a:"是肝的结构与功能单位，为多面棱柱体。每个肝小叶中央有一条贯穿其长轴走行的中央静脉，以中央静脉为中心，肝板、肝血窦和胆小管向肝小叶的四周大致呈放射状排列。"},
+{q:"名词解释：窦周隙", a:"内皮细胞与肝细胞之间狭窄的间隙，内含血浆，肝细胞的微绒毛伸入其中，是肝细胞与血液之间进行物质交换的场所。内还含有贮脂细胞，具有贮存VitA和产生胶原的功能。"},
+{q:"名词解释：肝巨噬细胞", a:"位于肝血窦内，胞体较大、形态不规则有突起，来自血液中的单核细胞，具有很强的吞噬能力，可清除血液中的细菌、异物和衰老的血细胞等。"}
+]
+},
+{
+id:15, title:"呼吸系统",
+questions:[
+{q:"气管壁哪些结构与其净化空气有关？", a:"（1）纤毛细胞纤毛的摆动，可清除异物。（2）杯状细胞及气管腺分泌的黏液可粘附空气中的灰尘、异物。（3）气管腺分泌的溶菌酶具有杀菌作用。（4）浆细胞分泌IgA，与上皮细胞产生的分泌片结合，形成分泌性IgA，进入气管腔杀灭病原微生物。"},
+{q:"Ⅰ型和Ⅱ型肺泡细胞的结构特征和功能是什么？", a:"Ⅰ型肺泡细胞扁平，除含核部略厚外，其他部分菲薄，是组成气-血屏障的主要结构，有利于气体交换。Ⅱ型肺泡细胞圆或立方形，胞质内富含粗面内质网、高尔基复合体、线粒体等，有较多的板层小体，分泌表面活性物质，具有降低肺泡表面张力、稳定肺泡大小的作用。在Ⅰ型肺泡细胞损伤时，Ⅱ型肺泡细胞可转化为Ⅰ型肺泡细胞，起修复作用。"},
+{q:"名词解释：气-血屏障", a:"肺泡和毛细血管间进行气体交换必须经过的几层结构，包括肺泡表面活性物质，Ⅰ型肺泡细胞与基膜，薄层结缔组织，毛细血管内皮及其基膜。利于气体迅速交换。"},
+{q:"名词解释：肺泡隔", a:"是相邻肺泡之间的薄层结缔组织，内含丰富的毛细血管利于气体交换；弹性纤维多，利于肺泡弹性回缩；还有较多巨噬细胞，能清除异物。"}
+]
+},
+{
+id:16, title:"泌尿系统",
+questions:[
+{q:"试述肾小体的组织结构及其与原尿生成的关系", a:"肾小体由血管球和肾小囊组成。血管球是入球微动脉分支形成的有孔毛细血管球。肾小囊为双层囊，壁层为单层扁平上皮，脏层为足细胞。足细胞从胞体伸出初级突起，再分出指状次级突起，互相穿插成栅栏状包裹毛细血管基膜外面，次级突起之间有裂孔膜。血液流经血管球毛细血管时，血浆中部分物质通过滤过屏障（有孔内皮、基膜、裂孔膜）进入肾小囊腔，即为原尿。"},
+{q:"简述球旁复合体的组成及其功能", a:"由球旁细胞、致密斑和球外系膜细胞组成。球旁细胞为入球微动脉管壁上的平滑肌细胞转化为上皮样细胞，能感受血压，分泌肾素。致密斑为远端小管靠近血管极一侧的上皮细胞特化而成的斑块状结构，能感受远端小管内钠离子浓度变化。球外系膜细胞传递信息。功能为调节血压，维持水、电解质平衡。"},
+{q:"简述近曲小管的光镜、电镜结构及其功能", a:"LM：管壁为单层立方或锥体形细胞；胞质嗜酸性强；游离面有刷状缘；侧面分界不清；基底部有纵纹。EM：大量紧密排列的微绒毛（刷状缘）、侧突、质膜内褶和纵向排列的杆状线粒体（纵纹）。功能：重吸收氨基酸、蛋白质、葡萄糖、水、离子等；排泌氢离子、氨等；转运排出药物。"},
+{q:"简述肾血液循环的特点及与尿液生成的关系", a:"（1）肾动脉直接来自于腹主动脉，血流量大。（2）形成两次毛细血管，第一次为血管球，起滤过作用；第二次为球后毛细血管网，起重吸收作用。（3）入球微动脉管径大于出球微动脉，使血管球内压力高，有利于滤过。（4）直小动脉、静脉与髓袢伴行，与尿液浓缩有关。"},
+{q:"名词解释：滤过屏障", a:"又称滤过膜，由血管球毛细血管有孔内皮、基膜、足细胞裂孔膜三层结构组成。血浆中部分物质通过滤过屏障进入肾小囊腔形成原尿，保证了对血浆成分的选择性通透。"},
+{q:"名词解释：足细胞", a:"是构成肾小囊脏层的细胞，电镜下从胞体伸出初级突起，每个初级突起又分出许多指状的次级突起，相邻的次级突起互相穿插成栅栏状，紧贴于血管球毛细血管基膜外面。次级突起之间有膜覆盖，称裂孔膜，参与滤过屏障的构成。"}
+]
+},
+{
+id:17, title:"男性生殖系统",
+questions:[
+{q:"试述睾丸支持细胞的结构与功能", a:"LM：细胞轮廓不清，呈不规则长锥体形，核常为不规则形，着色浅，核仁大而明显。EM：底部附在基膜上，顶部伸至腔面；侧面嵌有各级生精细胞；胞质内各种细胞器发达。\n功能：①相邻支持细胞的侧突胞膜形成紧密连接，参与构成血-睾屏障；②支持、营养、保护生精细胞；③吞噬精子形成时脱落的残余胞质；④合成并分泌雄激素结合蛋白；⑤胚胎期能分泌抗中肾旁管激素。"},
+{q:"试述睾丸间质细胞的结构与功能", a:"间质细胞成群分布于生精小管间的疏松结缔组织中；LM可见细胞呈圆形或多边形，核圆形居中，胞质嗜酸性；EM下具有分泌类固醇激素细胞的特点，即胞质内含丰富的滑面内质网，管状嵴线粒体和脂滴。功能：合成分泌雄激素。"},
+{q:"名词解释：血-睾屏障", a:"由血管内皮及其基膜、结缔组织、生精上皮基膜和相邻支持细胞间近基部的紧密连接所组成。可阻止血液中大分子物质接触生精上皮，形成有利于精子发生的微环境；还可阻止精子抗原物质外逸，避免引起自身免疫反应。"},
+{q:"名词解释：顶体", a:"由高尔基复合体形成，位于精子头部，覆盖于核前2/3，是特殊的溶酶体，内含多种水解酶，在受精时可溶解卵周围的放射冠和透明带，完成受精过程。"}
+]
+},
+{
+id:18, title:"女性生殖系统",
+questions:[
+{q:"简述卵泡的生长发育过程", a:"分为原始卵泡、生长卵泡和成熟卵泡三个阶段。（1）原始卵泡：位于卵巢皮质浅层，中央为初级卵母细胞，周围是一层扁平卵泡细胞。（2）生长卵泡又分为初级卵泡和次级卵泡：初级卵泡时初级卵母细胞体积增大，卵泡细胞变为立方或柱状并增殖为多层，出现透明带，形成卵泡膜。次级卵泡中出现卵泡腔，初级卵母细胞及周围卵泡细胞被挤至一侧形成卵丘，紧靠透明带的卵泡细胞称放射冠，卵泡腔周围的卵泡细胞形成颗粒层，卵泡膜分化为内外两层。（3）成熟卵泡：体积显著增大，向卵巢表面隆起，卵泡液剧增，颗粒层变薄。"},
+{q:"试述黄体的形成及其内分泌功能", a:"成熟卵泡排卵后，残留卵泡壁连同卵泡膜及其血管一起向卵泡腔内塌陷，在LH作用下发育成内分泌细胞团。主要由粒黄体细胞和膜黄体细胞构成，都具有类固醇激素分泌细胞的特点，粒黄体细胞分泌孕激素，并与膜黄体细胞协同分泌雌激素。若未受精，黄体维持12～14天后退化，称月经黄体；若受精，黄体继续发育增大，称妊娠黄体，还分泌松弛素。"},
+{q:"简述子宫内膜的周期性变化及其内分泌调节", a:"在卵巢分泌的雌激素和孕激素的周期性作用下，子宫内膜可分为月经期、增生期和分泌期。（1）增生期：在雌激素作用下，子宫内膜逐渐增厚至2～4mm；腺体逐渐增多增长。（2）分泌期：在雌激素和孕激素作用下，内膜继续增厚达5～7mm；子宫腺变长弯曲呈锯齿状，腺腔充满分泌物；螺旋动脉更弯曲。（3）月经期：黄体退化，激素水平下降，螺旋动脉收缩致内膜缺血坏死，随后短暂扩张使内膜崩溃脱落排出。受卵巢周期调控，卵巢变化受垂体FSH和LH调节。"},
+{q:"名词解释：透明带", a:"初级卵泡阶段，在卵母细胞与卵泡细胞之间出现一层较厚的嗜酸性膜，由卵母细胞和卵泡细胞共同分泌产生，主要是糖蛋白成分。电镜下可见卵母细胞的微绒毛和卵泡细胞的突起伸入透明带内。透明带上有供精子识别的特定部位，对精卵识别和特异性结合具有重要意义。"},
+{q:"名词解释：排卵", a:"月经周期第14天，垂体释放LH量急剧上升，促使成熟卵泡破裂，从卵泡壁脱落的次级卵母细胞连同透明带、放射冠与卵泡液一起，从卵巢排出的过程，称为排卵。"},
+{q:"名词解释：月经周期", a:"自青春期开始，在卵巢分泌的雌激素和孕激素的周期性作用下，子宫底部和体部的功能层内膜出现周期性变化，即每隔28天左右发生一次内膜剥脱、出血、修复和增生，称为月经周期。可分为月经期、增生期和分泌期三个时期。"}
+]
+},
+{
+id:19, title:"胚胎发生总论",
+questions:[
+{q:"简述胚泡正常植入的部位、时间、过程和变化", a:"（1）部位：子宫体和底部的后壁。（2）时间：受精后第5-6天开始，第11-12天完成。（3）过程：透明带已消失，极端滋养层细胞与子宫内膜接触，分泌蛋白水解酶，溶蚀子宫内膜形成缺口，胚泡逐渐被埋入，缺口周围内膜上皮增生修复。（4）变化：滋养层细胞分化为合体滋养层和细胞滋养层；内细胞群增殖分化；植入后的子宫内膜称蜕膜。"},
+{q:"叙述三胚层的形成过程及主要分化方向", a:"形成：第二周形成二胚层胚盘（上胚层和下胚层）。第三周上胚层细胞增殖形成原条，原沟深部细胞在上下胚层间迁移形成中胚层，部分进入下胚层置换为内胚层，上胚层改称外胚层。\n分化：（1）外胚层分化为中枢和周围神经系统，以及表皮及附属器等。（2）中胚层分化为结缔组织、肌组织、骨组织、血管、泌尿生殖系统等。（3）内胚层分化为咽喉以下消化管、消化腺、下呼吸道和肺的上皮等。"},
+{q:"叙述胎盘的结构和功能", a:"结构：圆盘状，由母体的底蜕膜和胎儿的丛密绒毛膜共同构成。胎儿面光滑，母体面粗糙，有15-30个胎盘小叶。功能：（1）物质交换：胎儿从母血中获取营养和氧气，排出代谢废物。（2）内分泌作用：分泌hCG、雌激素、孕激素、人胎盘催乳素。（3）屏障功能：大分子物质不易通过。"},
+{q:"名词解释：受精", a:"精子与卵子融合成为受精卵的过程，通常发生于精子排出后24-48小时、排卵后12-24小时，一般发生在输卵管壶腹部。意义：使代谢缓慢的生殖细胞成为生命力旺盛的受精卵，恢复二倍体和决定遗传性别。"},
+{q:"名词解释：植入", a:"胚泡逐渐埋入子宫内膜的过程。部位通常为子宫体部和底部；开始于受精后第5-6天，第11-12天完成。植入时透明带已消失，极端滋养层细胞与子宫内膜接触，分泌蛋白水解酶溶蚀内膜形成缺口，胚泡经此被埋于子宫内膜中。"},
+{q:"名词解释：胚泡", a:"卵裂球增至100个左右，细胞间出现腔隙融合为大腔，使整个胚呈囊泡状。中央的腔为胚泡腔；包绕胚泡腔的一层扁平细胞为滋养层，发育成绒毛膜；一端的内细胞群发育为胚体及部分胎膜。"},
+{q:"名词解释：胚盘", a:"历经二胚层胚盘和三胚层胚盘两个阶段。二胚层胚盘由上胚层（柱状细胞）和下胚层（立方细胞）组成。第三周形成三胚层胚盘（外、中、内胚层），胚盘是人体发生的原基。"},
+{q:"名词解释：胎盘屏障", a:"胎儿血与母体血在胎盘内进行物质交换所通过的结构。早期由合体滋养层、细胞滋养层及基膜、绒毛内结缔组织、毛细血管基膜和内皮组成；发育后期逐渐变薄，更利于物质交换。能阻隔大分子物质通过，保障胚胎发育微环境。"},
+{q:"名词解释：顶体反应", a:"获能后的精子释放顶体中的酶，溶蚀放射冠和透明带的过程。"},
+{q:"名词解释：透明带反应", a:"精子穿卵后，卵细胞中皮质颗粒中的酶释放，使透明带结构变化，后来的精子不能再结合及穿过透明带，保证了正常的单精受精。"}
+]
+},
+{
+id:20, title:"心血管系统的发生",
+questions:[
+{q:"简述血岛的形成及演变", a:"胚胎早期卵黄囊壁胚外中胚层间充质细胞密集而成的细胞团称血岛。周边的细胞变扁，分化为内皮细胞，进而形成原始血管并相互吻合成网；中央的细胞游离分化为原始血细胞，即造血干细胞。"},
+{q:"试述原始心房的分隔过程", a:"心房顶部背侧壁中央出现第一房间隔，向心内膜垫生长，游离缘和心内膜垫之间暂留第一房间孔。第一房间隔上部穿孔融合成第二房间孔。右侧从心房顶端长出第二房间隔，遮盖第二房间孔，下方留有卵圆孔。卵圆孔左侧被第一房间隔遮盖，称卵圆孔瓣。出生后左心房压力升高，卵圆孔生理性关闭。"},
+{q:"胎儿血液循环有哪些特点？出生后有哪些重要变化？", a:"胎儿特点：①来自胎盘的富氧血经脐静脉→静脉导管→下腔静脉→右心房，大多经卵圆孔→左心房→左心室→升主动脉。②右心室的血大多经动脉导管→降主动脉，肺血极少。③动静脉血有不同程度混合。\n出生后变化：①脐动脉、脐静脉和静脉导管闭锁；②动脉导管闭锁；③卵圆孔关闭。动静脉血完全分流。"},
+{q:"名词解释：法洛四联症", a:"4个缺陷同时并存：肺动脉狭窄、室间隔缺损、主动脉骑跨、右心室肥大。由于动脉干和心球分隔不均，主动脉肺动脉隔偏于肺动脉一侧所致。"},
+{q:"名词解释：房间隔缺损", a:"卵圆孔未闭最为常见。可由卵圆孔瓣穿孔、第一房间隔吸收过度、第二房间隔发育不全或心内膜垫发育不全引起。"},
+{q:"名词解释：室间隔缺损", a:"有膜部缺损和肌部缺损两种情况。膜部缺损较常见，由于心内膜垫组织不能与心球嵴及室间隔肌部融合所致。"}
+]
+},
+{
+id:21, title:"泌尿系统和生殖系统的发生",
+questions:[
+{q:"简述后肾发生的过程", a:"后肾由输尿管芽和生后肾原基相互诱导、分化而成。输尿管芽是中肾管末端向背外侧长出的盲管，主干形成输尿管，分支形成肾盂、肾盏和集合小管。生后肾原基在集合小管诱导下分化为肾小囊和肾小管，与血管球共同组成肾小体，形成肾单位。"},
+{q:"未分化性腺如何向睾丸或卵巢分化？", a:"男性：Y染色体SRY基因编码睾丸决定因子，启动向睾丸发育。初级性索形成睾丸索，分化为生精小管，原始生殖细胞分化为精原细胞，初级性索上皮细胞分化为支持细胞。睾丸索间间充质细胞分化为间质细胞。\n女性：无SRY基因，未分化性腺自然发育为卵巢。初级性索退化，表面上皮增生形成次级性索（皮质索），断裂成细胞团，中央为卵原细胞，周围为卵泡细胞。"},
+{q:"简述中肾旁管的来源及演变", a:"中肾旁管由尿生殖嵴头端外侧的体腔上皮凹陷后闭合而成。女性：上段和中段演化为输卵管，下段左右合并形成子宫及阴道穹窿部。男性：中肾旁管退化。"},
+{q:"名词解释：尿生殖嵴", a:"是泌尿系统和生殖系统的原基，起源于间介中胚层。由生肾索增生形成，分为外侧中肾嵴和内侧生殖腺嵴。"},
+{q:"名词解释：后肾", a:"为人体永久肾，由输尿管芽和生后肾原基分化形成。输尿管芽形成输尿管、肾盂、肾盏和集合小管。生后肾原基分化为肾单位。"},
+{q:"名词解释：隐睾", a:"如果睾丸未降入阴囊，称隐睾。多停留在腹腔内或腹股沟管处，由于此处温度高于阴囊，会影响精子发生，并易引发睾丸肿瘤。"},
+{q:"名词解释：多囊肾", a:"后肾发生中，若远端小管未与集合小管接通，肾单位产生的尿液在肾小管内积聚，使肾内出现大小不等的囊泡，压迫正常肾单位引起功能障碍。"}
+]
+},
+{
+id:22, title:"消化系统和呼吸系统的发生",
+questions:[
+{q:"简述原肠的形成及分化", a:"形成：胚盘向腹侧卷曲成圆柱形胚体，卵黄囊背侧卷曲成纵行管道，称原肠（原始消化管）。\n分化：前肠分化为咽、十二指肠以上的消化管、肝胆胰及呼吸系统。中肠分化为总胆管开口以下至横结肠右2/3的消化管。后肠分化成横结肠左1/3至肛管上段的消化管，以及膀胱和尿道的大部分。"},
+{q:"名词解释：肝憩室", a:"前肠末端腹侧壁内胚层增生，形成向外突出的囊，是肝和胆的原基。头支增生形成肝板和肝内胆管；尾支形成胆囊和胆囊管；基部形成胆总管。"},
+{q:"名词解释：喉气管憩室", a:"人胚第4周，原始咽尾端底壁中线形成一纵沟，后加深形成盲管，是下呼吸道的原基。上端发育为喉，中段为气管，末端膨大形成肺芽，发育为主支气管和肺。"},
+{q:"名词解释：透明膜病", a:"多发生于早产儿，因Ⅱ型肺泡细胞未分化完善，不能分泌足够的表面活性物质，致肺泡表面张力增大。出生后肺泡不能随呼吸运动扩张而出现呼吸困难，称新生儿呼吸窘迫综合征。"},
+{q:"名词解释：先天性巨结肠", a:"因神经嵴细胞未能迁移至肠壁内，使肠壁内副交感神经节细胞缺如，肠管不能蠕动呈麻痹状态，粪便淤积造成肠管扩张。"}
+]
+}
+];
+
+// ===================== STATE =====================
+let studyMode = false;
+let masteredSet = new Set();
+let drillPool = [];
+let drillIndex = 0;
+let currentDrill = null;
+
+// ===================== INIT =====================
+function init(){
+    loadProgress();
+    buildSidebar();
+    buildContent();
+    updateAllProgress();
+}
+
+function loadProgress(){
+    try{
+        const saved = localStorage.getItem('histology_mastered');
+        if(saved) masteredSet = new Set(JSON.parse(saved));
+    }catch(e){}
+}
+
+function saveProgress(){
+    try{
+        localStorage.setItem('histology_mastered', JSON.stringify([...masteredSet]));
+    }catch(e){}
+}
+
+function qKey(chId, qIdx){ return chId + '_' + qIdx; }
+
+function getTotalQuestions(){
+    let c=0;
+    chapters.forEach(ch=>c+=ch.questions.length);
+    return c;
+}
+
+function getMasteredCount(){
+    return masteredSet.size;
+}
+
+function getChapterMastered(chId){
+    let c=0;
+    chapters[chId-1].questions.forEach((_,i)=>{
+        if(masteredSet.has(qKey(chId,i)))c++;
+    });
+    return c;
+}
+
+function getChapterTotal(chId){
+    return chapters[chId-1].questions.length;
+}
+
+// ===================== SIDEBAR =====================
+function buildSidebar(){
+    const list = document.getElementById('chapterList');
+    let html = '';
+    chapters.forEach(ch=>{
+        const total = ch.questions.length;
+        const mastered = getChapterMastered(ch.id);
+        const pct = total ? Math.round(mastered/total*100) : 0;
+        const allDone = total>0 && mastered===total;
+        let qLinks = '';
+        ch.questions.forEach((q,i)=>{
+            const m = masteredSet.has(qKey(ch.id,i));
+            qLinks += `<a href="#q-${ch.id}-${i}" class="${m?'mastered':''}" onclick="scrollToQ(${ch.id},${i})">${i+1}. ${truncate(q.q,20)}</a>`;
+        });
+        html += `
+        <div class="chapter-item" data-ch="${ch.id}">
+            <div class="chapter-header" onclick="toggleChapter(this)">
+                <span class="arrow">&#9654;</span>
+                <span class="ch-name">第${ch.id}章 ${ch.title}</span>
+                <span class="ch-count">${mastered}/${total}</span>
+                <span class="ch-check ${allDone?'show':''}">&#10003;</span>
+            </div>
+            <div class="chapter-progress"><div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div></div>
+            <div class="chapter-questions" id="chq-${ch.id}">${qLinks}</div>
+        </div>`;
+    });
+    list.innerHTML = html;
+    // auto-open first chapter
+    const first = list.querySelector('.chapter-header');
+    if(first) toggleChapter(first);
+}
+
+function toggleChapter(el){
+    const wasOpen = el.classList.contains('open');
+    el.classList.toggle('open');
+    const qs = el.nextElementSibling.nextElementSibling;
+    if(qs) qs.classList.toggle('show', !wasOpen);
+}
+
+function scrollToQ(chId, qIdx){
+    // Close sidebar on mobile
+    if(window.innerWidth<=768) closeSidebar();
+    setTimeout(()=>{
+        const el = document.getElementById('q-'+chId+'-'+qIdx);
+        if(el){
+            el.scrollIntoView({behavior:'smooth',block:'center'});
+            el.style.background='#FFFDE7';
+            setTimeout(()=>el.style.background='',1500);
+        }
+    },100);
+}
+
+function truncate(s,n){
+    return s.length>n ? s.substring(0,n)+'...' : s;
+}
+
+// ===================== CONTENT =====================
+function buildContent(){
+    const view = document.getElementById('normalView');
+    let html = '';
+    chapters.forEach(ch=>{
+        if(ch.questions.length===0){
+            html += `<div class="chapter-section" data-ch="${ch.id}" id="ch-section-${ch.id}">
+                <h2 class="chapter-title">第${ch.id}章 ${ch.title} <span class="ch-progress">（无大题）</span></h2>
+                <div class="empty-state"><p>本章无大题内容</p></div>
+            </div>`;
+            return;
+        }
+        let cards = '';
+        ch.questions.forEach((q,i)=>{
+            const key = qKey(ch.id, i);
+            const isMastered = masteredSet.has(key);
+            cards += buildCard(ch.id, i, q.q, q.a, isMastered);
+        });
+        html += `<div class="chapter-section" data-ch="${ch.id}" id="ch-section-${ch.id}">
+            <h2 class="chapter-title">第${ch.id}章 ${ch.title} <span class="ch-progress" id="chprog-${ch.id}"></span></h2>
+            ${cards}
+        </div>`;
+    });
+    view.innerHTML = html;
+    updateChapterProgress();
+}
+
+function buildCard(chId, qIdx, question, answer, isMastered){
+    const showAns = studyMode ? '' : 'show';
+    return `<div class="q-card ${isMastered?'mastered-card':''}" id="q-${chId}-${qIdx}" data-ch="${chId}" data-qi="${qIdx}">
+        <div class="q-header" onclick="toggleAnswer(${chId},${qIdx})">
+            <span class="q-num">${qIdx+1}</span>
+            <div class="q-text">${highlightSearch(question)}</div>
+            <div class="q-actions">
+                <button class="master-btn ${isMastered?'mastered':''}" title="标记为已掌握" onclick="event.stopPropagation();toggleMaster(${chId},${qIdx})">${isMastered?'&#9733;':'&#9734;'}</button>
+            </div>
+        </div>
+        <div class="q-answer ${showAns}" id="ans-${chId}-${qIdx}">
+            <div class="answer-label">参考答案</div>
+            <div class="answer-content">${formatAnswer(answer)}</div>
+        </div>
+    </div>`;
+}
+
+function highlightSearch(text){
+    const kw = document.getElementById('searchInput').value.trim();
+    if(!kw) return text;
+    const regex = new RegExp('('+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+    return text.replace(regex,'<mark style="background:#FFF176;padding:0 2px;border-radius:2px">$1</mark>');
+}
+
+function formatAnswer(text){
+    return text.replace(/\n/g,'<br>');
+}
+
+function toggleAnswer(chId, qIdx){
+    const el = document.getElementById('ans-'+chId+'-'+qIdx);
+    if(el) el.classList.toggle('show');
+}
+
+function toggleMaster(chId, qIdx){
+    const key = qKey(chId, qIdx);
+    const card = document.getElementById('q-'+chId+'-'+qIdx);
+    const btn = card.querySelector('.master-btn');
+    if(masteredSet.has(key)){
+        masteredSet.delete(key);
+        btn.classList.remove('mastered');
+        btn.innerHTML = '&#9734;';
+        card.classList.remove('mastered-card');
+        showToast('已取消掌握标记');
+    } else {
+        masteredSet.add(key);
+        btn.classList.add('mastered');
+        btn.innerHTML = '&#9733;';
+        card.classList.add('mastered-card');
+        showToast('已标记为掌握！');
+    }
+    saveProgress();
+    updateAllProgress();
+}
+
+// ===================== PROGRESS =====================
+function updateAllProgress(){
+    const total = getTotalQuestions();
+    const mastered = getMasteredCount();
+    const pct = total ? Math.round(mastered/total*100) : 0;
+    document.getElementById('overallPercent').textContent = pct+'%';
+    document.getElementById('overallBar').style.width = pct+'%';
+    updateChapterProgress();
+    updateSidebarProgress();
+}
+
+function updateChapterProgress(){
+    chapters.forEach(ch=>{
+        const el = document.getElementById('chprog-'+ch.id);
+        if(!el) return;
+        const total = ch.questions.length;
+        const mastered = getChapterMastered(ch.id);
+        el.textContent = `(${mastered}/${total} 已掌握)`;
+    });
+}
+
+function updateSidebarProgress(){
+    chapters.forEach(ch=>{
+        const item = document.querySelector(`.chapter-item[data-ch="${ch.id}"]`);
+        if(!item) return;
+        const total = ch.questions.length;
+        const mastered = getChapterMastered(ch.id);
+        const pct = total ? Math.round(mastered/total*100) : 0;
+        const countEl = item.querySelector('.ch-count');
+        if(countEl) countEl.textContent = mastered+'/'+total;
+        const barEl = item.querySelector('.chapter-progress .bar-fill');
+        if(barEl) barEl.style.width = pct+'%';
+        const checkEl = item.querySelector('.ch-check');
+        if(checkEl){
+            checkEl.classList.toggle('show', total>0 && mastered===total);
+        }
+        // update question links
+        const links = item.querySelectorAll('.chapter-questions a');
+        links.forEach((link,i)=>{
+            link.classList.toggle('mastered', masteredSet.has(qKey(ch.id,i)));
+        });
+    });
+}
+
+// ===================== STUDY MODE =====================
+function toggleStudyMode(on){
+    studyMode = on;
+    document.getElementById('studyBadge').classList.toggle('show', on);
+    document.getElementById('studyToggle').classList.toggle('active', on);
+    // Toggle all answer visibility
+    document.querySelectorAll('.q-answer').forEach(el=>{
+        el.classList.toggle('show', !studyMode);
+    });
+}
+
+// ===================== SEARCH =====================
+function handleSearch(val){
+    const kw = val.trim().toLowerCase();
+    const sections = document.querySelectorAll('.chapter-section');
+    let totalVisible = 0;
+    let totalAll = 0;
+    let anyVisible = false;
+
+    sections.forEach(sec=>{
+        const chId = parseInt(sec.dataset.ch);
+        const ch = chapters[chId-1];
+        const cards = sec.querySelectorAll('.q-card');
+        let hasVisible = false;
+
+        cards.forEach(card=>{
+            const qi = parseInt(card.dataset.qi);
+            const q = ch.questions[qi];
+            const text = (q.q + ' ' + q.a).toLowerCase();
+            const match = !kw || text.includes(kw);
+            card.classList.toggle('hidden-by-search', !match);
+            if(match){
+                hasVisible = true;
+                totalVisible++;
+                // Update highlight
+                const qText = card.querySelector('.q-text');
+                if(qText) qText.innerHTML = highlightSearch(q.q);
+                const aContent = card.querySelector('.answer-content');
+                if(aContent) aContent.innerHTML = formatAnswer(q.a);
+            }
+        });
+
+        sec.classList.toggle('hidden-by-search', !hasVisible && kw);
+        if(hasVisible) anyVisible = true;
+    });
+
+    totalAll = getTotalQuestions();
+    const countEl = document.getElementById('searchCount');
+    if(kw){
+        countEl.textContent = `找到 ${totalVisible} / ${totalAll} 题`;
+    } else {
+        countEl.textContent = '';
+    }
+    document.getElementById('noResults').classList.toggle('show', kw && totalVisible===0);
+}
+
+// ===================== DRILL MODE =====================
+function startDrill(){
+    // Build pool of unanswered questions
+    drillPool = [];
+    chapters.forEach(ch=>{
+        ch.questions.forEach((q,i)=>{
+            if(!masteredSet.has(qKey(ch.id,i))){
+                drillPool.push({chId:ch.id, qIdx:i, q:q.q, a:q.a, chTitle:ch.title});
+            }
+        });
+    });
+
+    if(drillPool.length===0){
+        showToast('所有题目已掌握！');
+        return;
+    }
+
+    // Shuffle
+    for(let i=drillPool.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [drillPool[i],drillPool[j]]=[drillPool[j],drillPool[i]];
+    }
+
+    drillIndex = 0;
+    currentDrill = drillPool[0];
+
+    document.getElementById('normalView').style.display = 'none';
+    document.getElementById('drillView').classList.add('show');
+    document.getElementById('mainContent').classList.add('drill-mode');
+
+    renderDrill();
+}
+
+function exitDrill(){
+    document.getElementById('normalView').style.display = '';
+    document.getElementById('drillView').classList.remove('show');
+    document.getElementById('mainContent').classList.remove('drill-mode');
+}
+
+function renderDrill(){
+    if(drillPool.length===0){
+        exitDrill();
+        showToast('所有题目已掌握！');
+        return;
+    }
+
+    const d = currentDrill;
+    const key = qKey(d.chId, d.qIdx);
+    const isMastered = masteredSet.has(key);
+
+    document.getElementById('drillInfo').textContent = `第 ${drillIndex+1} / ${drillPool.length} 题 | 第${d.chId}章 ${d.chTitle}`;
+
+    document.getElementById('drillCard').innerHTML = `
+        <div class="drill-q">${d.q}</div>
+        <div class="drill-a" id="drillAnswer">
+            <div class="answer-label">参考答案</div>
+            <div class="answer-content">${formatAnswer(d.a)}</div>
+        </div>
+    `;
+
+    document.getElementById('drillNav').innerHTML = `
+        <button class="btn-prev" onclick="prevDrill()" ${drillIndex===0?'disabled style="opacity:0.4"':''}>上一题</button>
+        <button class="btn-show" onclick="toggleDrillAnswer()">显示答案</button>
+        <button class="btn-master" onclick="masterDrill()">${isMastered?'取消掌握':'标记掌握'}</button>
+        <button class="btn-next" onclick="nextDrill()">下一题</button>
+        <button class="btn-exit" onclick="exitDrill()">退出抽查</button>
+    `;
+}
+
+function toggleDrillAnswer(){
+    const el = document.getElementById('drillAnswer');
+    if(el) el.classList.toggle('show');
+}
+
+function nextDrill(){
+    if(drillIndex < drillPool.length-1){
+        drillIndex++;
+        currentDrill = drillPool[drillIndex];
+        renderDrill();
+    }
+}
+
+function prevDrill(){
+    if(drillIndex > 0){
+        drillIndex--;
+        currentDrill = drillPool[drillIndex];
+        renderDrill();
+    }
+}
+
+function masterDrill(){
+    const d = currentDrill;
+    const key = qKey(d.chId, d.qIdx);
+    const card = document.getElementById('q-'+d.chId+'-'+d.qIdx);
+
+    if(masteredSet.has(key)){
+        masteredSet.delete(key);
+        showToast('已取消掌握标记');
+    } else {
+        masteredSet.add(key);
+        showToast('已标记为掌握！');
+        // Remove from pool and go next
+        drillPool.splice(drillIndex, 1);
+        if(drillPool.length===0){
+            saveProgress();
+            updateAllProgress();
+            renderDrill();
+            return;
+        }
+        if(drillIndex >= drillPool.length) drillIndex = drillPool.length-1;
+        currentDrill = drillPool[drillIndex];
+    }
+
+    if(card){
+        const btn = card.querySelector('.master-btn');
+        if(masteredSet.has(key)){
+            btn.classList.add('mastered');
+            btn.innerHTML = '&#9733;';
+            card.classList.add('mastered-card');
+        } else {
+            btn.classList.remove('mastered');
+            btn.innerHTML = '&#9734;';
+            card.classList.remove('mastered-card');
+        }
+    }
+
+    saveProgress();
+    updateAllProgress();
+    renderDrill();
+}
+
+// ===================== SIDEBAR TOGGLE (Mobile) =====================
+function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar(){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+// ===================== RESET =====================
+function resetProgress(){
+    if(!confirm('确定要重置所有学习进度吗？此操作不可撤销。')) return;
+    masteredSet.clear();
+    saveProgress();
+    buildContent();
+    updateAllProgress();
+    showToast('进度已重置');
+}
+
+// ===================== TOAST =====================
+function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+// ===================== START =====================
+init();
+</script>
+</body>
+</html>
