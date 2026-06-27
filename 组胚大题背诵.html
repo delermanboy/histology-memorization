@@ -231,6 +231,44 @@ background:none;color:var(--danger);border:1px solid var(--danger);
 .drill-nav .btn-exit:hover{background:rgba(252,129,129,0.1)}
 .drill-info{text-align:center;font-size:13px;color:var(--text-light);margin-bottom:16px}
 
+/* AI Parse */
+.ai-parse-wrap{margin-top:16px}
+.ai-parse-btn{
+background:linear-gradient(135deg,var(--accent),#A78BFA);color:#fff;border:none;
+padding:10px 20px;border-radius:20px;cursor:pointer;font-family:inherit;font-size:14px;
+font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:var(--transition);
+}
+.ai-parse-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,92,252,0.3)}
+.ai-parse-btn .sparkle{font-size:16px}
+.ai-parse-panel{
+max-height:0;overflow:hidden;transition:max-height 0.5s ease;margin-top:0;
+}
+.ai-parse-panel.show{max-height:3000px;margin-top:16px}
+.ai-parse-inner{
+background:linear-gradient(135deg,#F3F0FF,#EDE9FE);border-radius:12px;padding:20px;
+border:1px solid #DDD6FE;
+}
+.ai-parse-inner h4{
+font-size:14px;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:6px;
+}
+.ai-parse-inner .ai-section{margin-bottom:14px}
+.ai-parse-inner .ai-section:last-child{margin-bottom:0}
+.ai-parse-inner .ai-label{
+font-size:12px;font-weight:700;color:#7C5CFC;background:#E9E3FF;
+padding:3px 10px;border-radius:10px;display:inline-block;margin-bottom:6px;
+}
+.ai-parse-inner .ai-text{font-size:13px;color:var(--text);line-height:1.8}
+.ai-parse-inner .ai-text b{color:var(--primary)}
+.ai-parse-inner .ai-keywords{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ai-parse-inner .ai-keywords span{
+background:#fff;color:var(--accent);border:1px solid #C4B5FD;
+padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;
+}
+.ai-parse-inner .ai-mermaid{
+background:#fff;border-radius:8px;padding:12px;font-size:13px;
+border:1px dashed #C4B5FD;color:var(--text);line-height:1.8;
+}
+
 /* Empty state */
 .empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}
 .empty-state .icon{font-size:48px;margin-bottom:12px}
@@ -911,11 +949,20 @@ function renderDrill(){
 
     document.getElementById('drillInfo').textContent = `第 ${drillIndex+1} / ${drillPool.length} 题 | 第${d.chId}章 ${d.chTitle}`;
 
+    const aiHtml = generateAIParse(d.q, d.a, d.chTitle);
     document.getElementById('drillCard').innerHTML = `
         <div class="drill-q">${d.q}</div>
         <div class="drill-a" id="drillAnswer">
             <div class="answer-label">参考答案</div>
             <div class="answer-content">${formatAnswer(d.a)}</div>
+        </div>
+        <div class="ai-parse-wrap">
+            <button class="ai-parse-btn" onclick="toggleAIParse()">
+                <span class="sparkle">&#10024;</span> AI 解析
+            </button>
+            <div class="ai-parse-panel" id="aiParsePanel">
+                <div class="ai-parse-inner">${aiHtml}</div>
+            </div>
         </div>
     `;
 
@@ -931,6 +978,119 @@ function renderDrill(){
 function toggleDrillAnswer(){
     const el = document.getElementById('drillAnswer');
     if(el) el.classList.toggle('show');
+}
+
+function toggleAIParse(){
+    const el = document.getElementById('aiParsePanel');
+    if(el) el.classList.toggle('show');
+}
+
+function generateAIParse(q, a, chTitle){
+    // 题型判断
+    let qType = '综合题';
+    if(q.includes('名词解释')) qType = '名词解释';
+    else if(q.includes('比较') || q.includes('区别')) qType = '比较题';
+    else if(q.includes('简述') || q.includes('试述')) qType = '论述题';
+    else if(q.includes('哪些') || q.includes('有什么')) qType = '列举题';
+
+    // 提取关键词（频率较高的专业词）
+    const stopWords = ['的','了','和','与','是','在','有','由','为','及','等','称','能','可','或','以及','主要','功能','结构','细胞','分泌','形成','位于','组成','构成','分布','含有','具有'];
+    const wordFreq = {};
+    const cleanA = a.replace(/[（）()①②③④⑤⑥⑦⑧⑨⑩\n；;。.,、]/g,' ').replace(/\s+/g,' ');
+    cleanA.split(' ').forEach(w=>{
+        if(w.length>=2 && w.length<=8 && !stopWords.includes(w) && !/^\d+$/.test(w)){
+            wordFreq[w] = (wordFreq[w]||0)+1;
+        }
+    });
+    const keywords = Object.entries(wordFreq).sort((a,b)=>b[1]-a[1]).slice(0,6).map(x=>x[0]);
+
+    // 提取要点（按数字/分号/换行拆分）
+    let points = [];
+    if(/[①②③④⑤⑥⑦⑧⑨⑩]/.test(a)){
+        points = a.split(/(?=[①②③④⑤⑥⑦⑧⑨⑩])/).filter(s=>s.trim());
+    }else if(/\n/.test(a)){
+        points = a.split('\n').filter(s=>s.trim().length>5);
+    }else{
+        points = a.split(/[；;](?=\d|[（(])/).filter(s=>s.trim().length>5);
+    }
+    if(points.length===0) points = [a];
+    const pointCount = points.length;
+
+    // 记忆逻辑生成
+    let memory = '';
+    if(qType==='名词解释'){
+        memory = '名词解释的记忆逻辑：<b>定义 → 结构/位置 → 功能/意义</b>。先理解这个词是什么，再看它在哪里、长什么样，最后记住它能干什么。';
+    }else if(qType==='比较题'){
+        memory = '比较题的记忆逻辑：<b>找维度、列对比</b>。从形态、位置、结构、功能等维度分别对比，不要混在一起记。建议用表格或左右对照的方式记忆。';
+    }else if(qType==='列举题'){
+        memory = '列举题的记忆逻辑：<b>分类归纳 + 关键词串联</b>。把答案按类别分组记忆，不要死记硬背每个字，抓住每点的核心关键词即可。';
+    }else{
+        memory = '论述题的记忆逻辑：<b>总分结构</b>。先记整体框架（有几大部分），再逐个填充细节。建议用"提纲 + 关键词"的方式背诵，不要试图一字不差。';
+    }
+
+    // 易错提示
+    let pitfalls = '';
+    if(a.includes('类固醇') && a.includes('含氮')){
+        pitfalls = '<b>易混淆：</b>类固醇激素细胞 vs 含氮激素细胞的结构特点是高频考点。记住口诀：<b>「类滑含粗」</b>——类固醇→滑面内质网丰富；含氮→粗面内质网丰富。';
+    }else if(q.includes('骨骼肌') && q.includes('心肌')){
+        pitfalls = '<b>易混淆：</b>骨骼肌与心肌的「三联体 vs 二联体」和「横小管位置」是常考点。骨骼肌在A/I带交界处，心肌在Z线水平。';
+    }else if(q.includes('肾小体') || q.includes('滤过屏障')){
+        pitfalls = '<b>易混淆：</b>滤过屏障三层结构顺序不要搞反：有孔内皮 → 基膜 → 裂孔膜。可以记作<b>「内基裂」</b>。';
+    }else if(q.includes('黄体')){
+        pitfalls = '<b>易混淆：</b>粒黄体细胞分泌孕激素，膜黄体细胞协同分泌雌激素。不要记混各自的主要产物。';
+    }else if(q.includes('卵泡')){
+        pitfalls = '<b>易混淆：</b>卵泡发育四阶段的顺序和特征：原始→初级→次级→成熟。关键特征是「初级有多层细胞+透明带，次级有卵泡腔」。';
+    }else if(q.includes('粒细胞')){
+        pitfalls = '<b>易混淆：</b>三种粒细胞的形态和功能特点容易混淆。记住口诀：<b>「中细酸粗碱少」</b>——中性颗粒细、嗜酸颗粒粗、嗜碱数量少。';
+    }else if(a.includes('植入') || a.includes('胚泡')){
+        pitfalls = '<b>易混淆：</b>植入时间和部位是常考点：受精后5-6天开始，11-12天完成，部位在子宫体部和底部后壁。';
+    }else if(a.includes('心内膜垫') || a.includes('房间隔') || a.includes('室间隔')){
+        pitfalls = '<b>易混淆：</b>房间隔和室间隔的形成过程复杂，重点记住「第一房间孔/第二房间孔/卵圆孔」的出现顺序，以及卵圆孔瓣的作用。';
+    }else if(qType==='名词解释'){
+        pitfalls = '<b>答题技巧：</b>名词解释不要只写一句话，尽量涵盖定义、结构特点和功能意义三个层面，这样才能拿满分。';
+    }else{
+        pitfalls = '<b>答题技巧：</b>大题回答建议采用「总-分」结构，先给出概括性陈述，再分点展开。每点开头用关键词，方便阅卷老师快速定位得分点。';
+    }
+
+    // 结构化要点HTML
+    let pointsHtml = '';
+    if(pointCount>1){
+        pointsHtml = points.slice(0,5).map((p,idx)=>{
+            const clean = p.replace(/^[①②③④⑤⑥⑦⑧⑨⑩\s\n；;.]+/,'').trim();
+            const firstPhrase = clean.split(/[，,；;]/)[0].substring(0,18);
+            return `<div style="margin-bottom:6px"><b style="color:var(--primary)">${idx+1}.</b> ${firstPhrase}${clean.length>18?'…':''}</div>`;
+        }).join('');
+    }else{
+        pointsHtml = '<div style="color:var(--text-light)">答案为连续描述，建议通读理解后提炼关键词记忆</div>';
+    }
+
+    // 关键词标签
+    let kwHtml = keywords.map(k=>`<span>${k}</span>`).join('');
+    if(kwHtml==='') kwHtml = '<span style="color:var(--text-light)">暂无</span>';
+
+    return `
+        <h4><span>&#10024;</span> AI 智能解析</h4>
+        <div class="ai-section">
+            <div class="ai-label">考点定位</div>
+            <div class="ai-text">本题属于 <b>${chTitle}</b> 章节，题型为 <b>${qType}</b>。共涉及 <b>${pointCount}</b> 个要点。</div>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">答案结构梳理</div>
+            <div class="ai-text">${pointsHtml}</div>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">高频关键词</div>
+            <div class="ai-keywords">${kwHtml}</div>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">记忆逻辑</div>
+            <div class="ai-text">${memory}</div>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">易错提示</div>
+            <div class="ai-text">${pitfalls}</div>
+        </div>
+    `;
 }
 
 function nextDrill(){
